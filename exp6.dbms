@@ -1,0 +1,27 @@
+CREATE OR REPLACE TRIGGER up_classd BEFORE UPDATE ON 
+customer FOR EACH ROW
+BEGIN
+if updating then
+DBMS_OUTPUT.PUT_LINE(‘new value is’|| :new.stotal); 
+DBMS_OUTPUT.PUT_LINE(‘old value is’|| :old.stotal);
+END;
+ 
+CREATE OR REPLACE TRIGGER del_classb BEFORE DELETE ON 
+customer FOR EACH ROW
+BEGIN
+DBMS_OUTPUT.PUT_LINE('row deleted');
+END;
+
+CREATE OR REPLACE TRIGGER ins_classb BEFORE INSERT ON classb 
+FOR EACH ROW
+DECLARE
+InvTot EXCEPTION;
+BEGIN
+IF :new.stotal > 1000 
+THEN
+RAISE InvTot;
+end if;
+EXCEPTION
+when InvTot then
+RAISE_APPLICATION_ERROR(-20000, 'Total not valid');
+END;
